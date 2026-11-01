@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Admin Panel</title>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        body { background: #0f141d; color: #e1e1e1; padding: 15px; }
+        h2 { color: #00cec9; margin-bottom: 15px; }
+        h3 { margin: 15px 0 8px; color: #fdcb6e; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: #1a2230; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #283446; font-size: 13px; }
+        th { background: #202b3c; color: #fff; }
+        .btn-paid { background: #00b894; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .status-paid { color: #00b894; font-weight: bold; }
+        .status-pending { color: #d63031; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h2>মাস্টার কন্ট্রোল প্যানেল</h2>
+
+    <h3>১. প্লেয়ারদের তালিকা ও লাইভ ব্যালেন্স</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>নাম</th>
+                <th>ফোন নম্বর</th>
+                <th>কয়েন</th>
+                <th>ব্যালেন্স</th>
+            </tr>
+        </thead>
+        <tbody id="playerTable"></tbody>
+    </table>
+
+    <h3>২. উইথড্র রিকোয়েস্ট তালিকা</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>প্লেয়ার</th>
+                <th>ব্যাংক/UPI মোবাইল</th>
+                <th>টাকা</th>
+                <th>স্ট্যাটাস</th>
+                <th>অ্যাকশন</th>
+            </tr>
+        </thead>
+        <tbody id="withdrawTable"></tbody>
+    </table>
+
+    <script>
+        // আপনার Firebase কনফিগ এখানেও বসাবেন
+        const firebaseConfig = {
+
+  apiKey: "AIzaSyBL2MkFlwXu--GCyce2mer_yB7W-2XmzJ8",
+
+  authDomain: "running-game-15125.firebaseapp.com",
+
+  databaseURL: "https://running-game-15125-default-rtdb.firebaseio.com",
+
+  projectId: "running-game-15125",
+
+  storageBucket: "running-game-15125.firebasestorage.app",
+
+  messagingSenderId: "724369788844",
+
+  appId: "1:724369788844:web:4a560fdad91a6adf217409",
+
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // প্লেয়ারদের লাইভ ডেটা আনা
+        db.ref('players').on('value', (snap) => {
+            const table = document.getElementById('playerTable');
+            table.innerHTML = '';
+            const players = snap.val();
+            for (let id in players) {
+                let p = players[id];
+                table.innerHTML += `
+                    <tr>
+                        <td>${p.name}</td>
+                        <td>${p.phone}</td>
+                        <td>${p.coins || 0}</td>
+                        <td>₹${(p.balance || 0).toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+        });
+
+        // উইথড্র রিকোয়েস্ট হ্যান্ডলিং
+        db.ref('withdraw_requests').on('value', (snap) => {
+            const table = document.getElementById('withdrawTable');
+            table.innerHTML = '';
+            const reqs = snap.val();
+            for (let key in reqs) {
+                let r = reqs[key];
+                let isPending = r.status === 'Pending';
+                table.innerHTML += `
+                    <tr>
+                        <td>${r.name}</td>
+                        <td><strong>${r.phone}</strong></td>
+                        <td>₹${r.amount.toFixed(2)}</td>
+                        <td class="${isPending ? 'status-pending' : 'status-paid'}">${r.status}</td>
+                        <td>
+                            ${isPending ? `<button class="btn-paid" onclick="markPaid('${key}')">টাকা পাঠানো হয়েছে</button>` : 'সম্পন্ন'}
+                        </td>
+                    </tr>
+                `;
+            }
+        });
+
+        function markPaid(reqKey) {
+            if (confirm("আপনি কি এই নম্বরে UPI দিয়ে টাকা পাঠিয়ে দিয়েছেন?")) {
+                db.ref('withdraw_requests/' + reqKey).update({ status: 'Approved & Paid' });
+            }
+        }
+    </script>
+</body>
+</html>
