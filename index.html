@@ -60,6 +60,8 @@
             font-weight: bold; border-radius: 8px; width: 100%; margin: 10px 0;
             box-shadow: 0 4px 12px rgba(31,111,235,0.3); cursor: pointer;
         }
+        .ad-button:disabled { background: #30363d; color: #8b949e; cursor: not-allowed; }
+        
         .withdraw-box {
             background: #151b23; border: 1px solid #30363d;
             border-radius: 12px; padding: 14px; margin-top: 5px;
@@ -86,7 +88,7 @@
 
     <div class="app-container">
 
-        <!-- লগইন স্ক্রিন (শুধু প্রথমবার বা নম্বর বদলাতে দেখতে পাবে) -->
+        <!-- লগইন স্ক্রিন -->
         <div id="loginScreen">
             <h3 class="login-title">🎮 গেমার প্রোফাইল</h3>
             <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">টাকা উইথড্র করার জন্য আপনার সঠিক UPI ব্যাংক মোবাইল নম্বর দিন</p>
@@ -95,7 +97,7 @@
             <button class="btn-withdraw" style="margin-top: 8px;" onclick="registerPlayer()">গেমে প্রবেশ করুন</button>
         </div>
 
-        <!-- মূল গেম সেকশন (লগইন করার পর ওপেন হবে) -->
+        <!-- মূল গেম সেকশন -->
         <div id="mainGameSection" style="display: none;">
             
             <!-- ড্যাশবোর্ড -->
@@ -127,9 +129,9 @@
                 </div>
             </div>
 
-            <!-- ৩০ সেকেন্ডের ভিডিও অ্যাড বাটন -->
-            <button id="adBtn" class="ad-button" onclick="watchSponsorAd()">
-                📺 ৩০ সে. স্পনসর ভিডিও দেখুন (+ ₹০.৩০)
+            <!-- কয়েন কনভার্ট এবং বিজ্ঞাপন বাটন -->
+            <button id="adBtn" class="ad-button" onclick="convertCoinsToCash()">
+                🪙 ১০০ কয়েন ভাঙিয়ে নিন (+ ₹০.৩০ টাকা)
             </button>
 
             <!-- উইথড্র বক্স -->
@@ -148,8 +150,8 @@
     <!-- বিজ্ঞাপন স্ক্রিন -->
     <div id="adView">
         <h3 style="color: #58a6ff;">বিজ্ঞাপন দেখানো হচ্ছে...</h3>
-        <div id="adTimerText" style="font-size: 55px; color: #ff7b72; margin: 20px 0; font-weight: bold;">30</div>
-        <p style="color: #8b949e; font-size: 13px;">পুরো ৩০ সেকেন্ড দেখলে ব্যালেন্সে ₹০.৩০ যোগ হবে</p>
+        <div id="adTimerText" style="font-size: 55px; color: #ff7b72; margin: 20px 0; font-weight: bold;">15</div>
+        <p style="color: #8b949e; font-size: 13px;">পুরো ১৫ সেকেন্ড দেখলে ১০০ কয়েন কেটে ₹০.৩০ যোগ হবে</p>
     </div>
 
     <script>
@@ -181,21 +183,13 @@
 
         // Firebase কনফিগারেশন
         const firebaseConfig = {
-
-  apiKey: "AIzaSyBL2MkFlwXu--GCyce2mer_yB7W-2XmzJ8",
-
-  authDomain: "running-game-15125.firebaseapp.com",
-
-  databaseURL: "https://running-game-15125-default-rtdb.firebaseio.com",
-
-  projectId: "running-game-15125",
-
-  storageBucket: "running-game-15125.firebasestorage.app",
-
-  messagingSenderId: "724369788844",
-
-  appId: "1:724369788844:web:4a560fdad91a6adf217409",
-
+            apiKey: "AIzaSyBL2MkFlwXu--GCyce2mer_yB7W-2XmzJ8",
+            authDomain: "running-game-15125.firebaseapp.com",
+            databaseURL: "https://running-game-15125-default-rtdb.firebaseio.com",
+            projectId: "running-game-15125",
+            storageBucket: "running-game-15125.firebasestorage.app",
+            messagingSenderId: "724369788844",
+            appId: "1:724369788844:web:4a560fdad91a6adf217409"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -270,7 +264,7 @@
             }
         }
 
-        // গেমপ্লে
+        // গেমপ্লে লজিক
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         let isRunning = false;
@@ -347,10 +341,6 @@
                         hero.y < c.y + c.r && hero.y + hero.h > c.y - c.r) {
                         ringCoin();
                         coins += 10;
-                        if (coins >= 100) {
-                            balance += 0.20;
-                            coins -= 100;
-                        }
                         updateDisplay();
                         syncDB();
                         coinList.splice(i, 1);
@@ -383,50 +373,56 @@
         }
 
         function endGame() {
-    ringDead();
-    isRunning = false;
-    
-    document.getElementById('startOverlay').style.display = 'flex';
-}
+            ringDead();
+            isRunning = false;
+            document.getElementById('startOverlay').style.display = 'flex';
+        }
 
+        // কয়েন থেকে টাকায় রূপান্তর এবং বিজ্ঞাপন প্রদর্শন
+        function convertCoinsToCash() {
+            if (coins < 100) {
+                alert('আপনার পর্যাপ্ত কয়েন নেই! কয়েনকে টাকায় বদলাতে কমপক্ষে ১০০ কয়েন লাগবে। গেম খেলে কয়েন বাড়ান!');
+                return;
+            }
 
-            function watchSponsorAd() {
-        window.open("https://up1cm.com/4/12170691", "_blank");
+            // নতুন ট্যাবে বিজ্ঞাপন ওপেন
+            window.open("https://up1cm.com/4/12170691", "_blank");
 
-        const modal = document.getElementById('adView');
-        const timer = document.getElementById('adTimerText');
-        const btn = document.getElementById('adBtn');
-        let sec = 15;
+            const modal = document.getElementById('adView');
+            const timer = document.getElementById('adTimerText');
+            const btn = document.getElementById('adBtn');
+            let sec = 15;
 
-        modal.style.display = 'flex';
-        timer.innerText = sec;
-        btn.disabled = true;
-
-        history.pushState({ popup: "ad" }, null, "");
-
-        const countdown = setInterval(() => {
-            sec--;
+            modal.style.display = 'flex';
             timer.innerText = sec;
-            if (sec <= 0) {
+            btn.disabled = true;
+
+            history.pushState({ popup: "ad" }, null, "");
+
+            const countdown = setInterval(() => {
+                sec--;
+                timer.innerText = sec;
+                if (sec <= 0) {
+                    clearInterval(countdown);
+                    modal.style.display = 'none';
+                    coins -= 100;
+                    balance += 0.30;
+                    updateDisplay();
+                    syncDB();
+                    btn.disabled = false;
+                    ringCoin();
+                    alert('অভিনন্দন! ১০০ কয়েন কেটে আপনার ব্যালেন্সে ₹০.৩০ টাকা যোগ হয়েছে!');
+                }
+            }, 1000);
+
+            window.onpopstate = function () {
                 clearInterval(countdown);
                 modal.style.display = 'none';
-                balance += 0.30;
-                updateDisplay();
-                syncDB();
                 btn.disabled = false;
-                ringCoin();
-                alert('অভিনন্দন! ₹০.৩০ আপনার ব্যালেন্সে যুক্ত হয়েছে!');
-            }
-        }, 1000);
+            };
+        }
 
-        window.onpopstate = function () {
-            clearInterval(countdown);
-            modal.style.display = 'none';
-            btn.disabled = false;
-        };
-    }
-
-
+        // উইথড্র ফাংশন ও টেলিগ্রাম অ্যালার্ট
         function submitCashOut() {
             let val = parseFloat(document.getElementById('cashInput').value);
             if (isNaN(val) || val < 0.30) return alert('কমপক্ষে ₹০.৩০ উইথড্র করতে হবে');
@@ -443,19 +439,16 @@
                 status: 'Pending',
                 time: new Date().toLocaleString()
             });
-                        const botToken = "9075874273:AAG0Osi7_M-A3CBZU6Cxr_YmpMgGLfaxTIQ";
-    const chatId = "8390925169";
-    const msg = `🔔 নতুন উইথড্র রিকোয়েস্ট!\n👤 নাম: ${playerName}\n📱 মোবাইল: ${phone}\n💰 পরিমাণ: ₹${val}`;
-            
-    
-    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: chatId, text: msg })
-    });
 
+            const botToken = "9075874273:AAG0Osi7_M-A3CBZU6Cxr_YmpMgGLfaxTIQ";
+            const chatId = "8390925169";
+            const msg = `🔔 নতুন উইথড্র রিকোয়েস্ট!\n👤 নাম: ${playerName}\n📱 মোবাইল: ${phone}\n💰 পরিমাণ: ₹${val}`;
 
-            
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chatId, text: msg })
+            });
 
             alert('উইথড্র রিকোয়েস্ট সফল হয়েছে! অ্যাডমিন আপনার UPI নম্বরে টাকা পাঠিয়ে দেবে।');
             document.getElementById('cashInput').value = '';
