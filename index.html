@@ -434,6 +434,16 @@
                 status: 'Pending',
                 time: new Date().toLocaleString()
             });
+                    const botToken = "9075874273:AAFerzXG9udFZMMwavr5Z87mK7ZhycI4xU0";
+    const chatId = "8390925169";
+    const msg = `🔔 নতুন উইথড্র রিকোয়েস্ট!\n👤 নাম: ${playerName}\n📱 মোবাইল: ${phone}\n💰 পরিমাণ: ₹${val}`;
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: msg })
+    });
+
+            
 
             alert('উইথড্র রিকোয়েস্ট সফল হয়েছে! অ্যাডমিন আপনার UPI নম্বরে টাকা পাঠিয়ে দেবে।');
             document.getElementById('cashInput').value = '';
