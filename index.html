@@ -85,7 +85,20 @@
     </style>
 </head>
 <body>
-
+<!-- গেম শুরুর ওয়েলকাম নোটিশ পপ-আপ -->
+<div id="welcomeNoticeModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 99999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+  <div style="background: #1e1e2f; color: #ffffff; border-radius: 16px; max-width: 380px; width: 100%; padding: 22px; text-align: center; border: 2px solid #ffcc00; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-family: sans-serif;">
+    <h2 style="color: #ffcc00; margin-top: 0; font-size: 20px;">🎮 গেম খেলুন ও টাকা জিতুন!</h2>
+    <div style="text-align: left; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin: 15px 0; background: #2a2a3d; padding: 12px; border-radius: 10px;">
+      <p style="margin: 6px 0;">🪙 <b>কয়েন আর্ন:</b> গেম খেলে বেশি বেশি কয়েন সংগ্রহ করুন।</p>
+      <p style="margin: 6px 0;">💰 <b>ক্যাশ কনভার্ট:</b> প্রতি ১০০ কয়েন হলে বাটনে চাপ দিয়ে টাকায় বদলে নিন।</p>
+      <p style="margin: 6px 0;">📲 <b>সরাসরি পেমেন্ট:</b> নির্দিষ্ট ব্যালেন্স পূর্ণ হলেই ব্যাংক বা UPI-তে তোলার সুযোগ।</p>
+      <p style="margin: 6px 0; font-size: 12px; color: #00ffcc;">⚠️ <i>বিজ্ঞাপন পেজটি চালু হলে ৫-১০ সেকেন্ড দেখুন, ব্যালেন্স ১০০% নিশ্চিত যোগ হবে।</i></p>
+    </div>
+    <button onclick="closeWelcomeNotice()" style="background: linear-gradient(45deg, #ffcc00, #ff9900); color: #000; border: none; padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%;">খেলতে শুরু করুন (Skip)</button>
+  </div>
+</div>
+    
     <div class="app-container">
 
         <!-- লগইন স্ক্রিন -->
@@ -457,7 +470,16 @@
         }
 
         checkAuth();
-        gameCycle();
-    </script>
+gameCycle();
+
+function closeWelcomeNotice() {
+  const noticeModal = document.getElementById('welcomeNoticeModal');
+  if (noticeModal) {
+    noticeModal.style.display = 'none';
+  }
+}
+</script>
+
+    
 </body>
 </html>
