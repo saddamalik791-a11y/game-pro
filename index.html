@@ -390,33 +390,42 @@
 }
 
 
-        function watchSponsorAd() {
-        
-    
-            const modal = document.getElementById('adView');
-            const timer = document.getElementById('adTimerText');
-            const btn = document.getElementById('adBtn');
-            let sec = 15;
+            function watchSponsorAd() {
+        window.open("https://up1cm.com/4/12170691", "_blank");
 
-            modal.style.display = 'flex';
+        const modal = document.getElementById('adView');
+        const timer = document.getElementById('adTimerText');
+        const btn = document.getElementById('adBtn');
+        let sec = 15;
+
+        modal.style.display = 'flex';
+        timer.innerText = sec;
+        btn.disabled = true;
+
+        history.pushState({ popup: "ad" }, null, "");
+
+        const countdown = setInterval(() => {
+            sec--;
             timer.innerText = sec;
-            btn.disabled = true;
+            if (sec <= 0) {
+                clearInterval(countdown);
+                modal.style.display = 'none';
+                balance += 0.30;
+                updateDisplay();
+                syncDB();
+                btn.disabled = false;
+                ringCoin();
+                alert('অভিনন্দন! ₹০.৩০ আপনার ব্যালেন্সে যুক্ত হয়েছে!');
+            }
+        }, 1000);
 
-            const countdown = setInterval(() => {
-                sec--;
-                timer.innerText = sec;
-                if (sec <= 0) {
-                    clearInterval(countdown);
-                    modal.style.display = 'none';
-                    balance += 0.30;
-                    updateDisplay();
-                    syncDB();
-                    btn.disabled = false;
-                    ringCoin();
-                    alert('অভিনন্দন! ₹০.৩০ আপনার ব্যালেন্সে যুক্ত হয়েছে।');
-                }
-            }, 1000);
-        }
+        window.onpopstate = function () {
+            clearInterval(countdown);
+            modal.style.display = 'none';
+            btn.disabled = false;
+        };
+    }
+
 
         function submitCashOut() {
             let val = parseFloat(document.getElementById('cashInput').value);
