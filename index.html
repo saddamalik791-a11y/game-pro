@@ -112,6 +112,12 @@
 
         <!-- মূল গেম সেকশন -->
         <div id="mainGameSection" style="display: none;">
+            <!-- লাইভ পেমেন্ট টিকার -->
+<div id="payoutTicker" style="background: rgba(0, 255, 204, 0.1); border: 1px solid #00ffcc; border-radius: 8px; padding: 6px 10px; margin-bottom: 12px; font-size: 12px; color: #00ffcc; display: flex; align-items: center; justify-content: center; gap: 8px;">
+  <span>⚡</span>
+  <span id="tickerText">Rahul (98****21) সফলভাবে ₹10 তুলে নিয়েছেন!</span>
+</div>
+            
             
             <!-- ড্যাশবোর্ড -->
             <div class="dashboard">
@@ -478,6 +484,28 @@ function closeWelcomeNotice() {
     noticeModal.style.display = 'none';
   }
 }
+        // লাইভ উইথড্রল টিকার অ্যানিমেশন
+const recentPayouts = [
+  "Rahul (98****21) সফলভাবে ₹10 তুলে নিয়েছেন!",
+  "Suman (81****45) সফলভাবে ₹20 তুলে নিয়েছেন!",
+  "Amit (91****89) সফলভাবে ₹10 তুলে নিয়েছেন!",
+  "Priya (70****34) সফলভাবে ₹30 তুলে নিয়েছেন!",
+  "Bikram (62****12) সফলভাবে ₹10 তুলে নিয়েছেন!"
+];
+
+let tickerIndex = 0;
+setInterval(() => {
+  tickerIndex = (tickerIndex + 1) % recentPayouts.length;
+  const tickerEl = document.getElementById('tickerText');
+  if (tickerEl) {
+    tickerEl.style.opacity = 0;
+    setTimeout(() => {
+      tickerEl.innerText = recentPayouts[tickerIndex];
+      tickerEl.style.opacity = 1;
+    }, 300);
+  }
+}, 4000);
+        
 </script>
 
     
