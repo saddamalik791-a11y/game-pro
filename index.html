@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Runner Cash Pro</title>
+    <title>Runner Cash Pro - By Sak_424</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #0b0e14; color: #f0f6fc; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 30px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #0b0e14; color: #f0f6fc; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 30px; user-select: none; -webkit-user-select: none; }
         .app-container { width: 100%; max-width: 420px; padding: 12px; }
 
         /* লগইন স্ক্রিন */
         #loginScreen {
             background: #151b23; border: 1px solid #30363d;
-            border-radius: 12px; padding: 25px 18px; margin-top: 40px;
+            border-radius: 12px; padding: 25px 18px; margin-top: 25px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.6); text-align: center;
         }
         .login-title { font-size: 20px; color: #58a6ff; margin-bottom: 5px; }
@@ -32,17 +32,24 @@
         .stat-item strong { font-size: 15px; color: #58a6ff; }
         .cash-color { color: #3fb950 !important; }
 
-        /* বোনাস ও এক্সট্রা বাটন এরিয়া */
+        /* ডেভেলপার ব্যাজ */
+        .dev-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(88, 166, 255, 0.12); border: 1px solid #58a6ff;
+            color: #58a6ff; font-size: 12px; padding: 5px 12px; border-radius: 20px;
+            cursor: pointer; font-weight: bold; margin-bottom: 10px;
+        }
+
+        /* বাটন গ্রিড */
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
         .btn-action-card {
             background: #1c2128; border: 1px solid #30363d; border-radius: 10px;
             padding: 10px; text-align: center; color: #fff; cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.1s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
-        .btn-action-card:active { transform: scale(0.97); }
         .btn-action-card span { display: block; font-size: 11px; color: #8b949e; margin-top: 2px; }
 
-        /* গেম ক্যানভাস এরিয়া */
+        /* ক্যানভাস এরিয়া */
         .canvas-holder {
             position: relative; width: 100%; height: 260px;
             border-radius: 12px; overflow: hidden; border: 1px solid #30363d;
@@ -62,7 +69,7 @@
             cursor: pointer;
         }
 
-        /* কন্ট্রোল বাটন ও উইথড্র */
+        /* কন্ট্রোল বাটন ও ইনপুট */
         .ad-button {
             background: linear-gradient(135deg, #1f6feb, #0969da);
             color: #fff; border: none; padding: 12px; font-size: 14px;
@@ -76,8 +83,9 @@
             border-radius: 12px; padding: 14px; margin-top: 5px;
         }
         input {
-            width: 100%; padding: 11px; margin: 8px 0; border-radius: 8px;
+            width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px;
             border: 1px solid #30363d; background: #0b0e14; color: #fff; outline: none;
+            user-select: auto !important; -webkit-user-select: auto !important; font-size: 14px;
         }
         .btn-withdraw {
             background: #238636; color: #fff; border: none; padding: 12px;
@@ -94,9 +102,7 @@
             background: #161b22; border: 1px solid #30363d; border-radius: 16px;
             max-width: 360px; width: 100%; padding: 20px; text-align: center;
         }
-
-        /* স্পিন হুইল স্টাইল */
-        #wheelCanvas { width: 220px; height: 220px; margin: 15px auto; display: block; border-radius: 50%; box-shadow: 0 0 15px rgba(0,255,204,0.4); }
+        #wheelCanvas { width: 220px; height: 220px; margin: 15px auto; display: block; border-radius: 50%; }
     </style>
 </head>
 <body>
@@ -110,16 +116,25 @@
       <p style="margin: 4px 0;">💰 <b>ক্যাশ কনভার্ট:</b> প্রতি ১০০ কয়েন = ₹০.২০ টাকা।</p>
       <p style="margin: 4px 0;">📲 <b>সরাসরি পেমেন্ট:</b> মাত্র ₹২ হলেই আপনার PhonePe/GPay-তে টাকা পৌঁছে যাবে।</p>
     </div>
-    <button onclick="closeWelcomeNotice()" style="background: linear-gradient(45deg, #ffcc00, #ff9900); color: #000; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%;">খেলতে শুরু করুন</button>
+    <!-- সরাসরি ইনলাইন অ্যাকশন যাতে টাচে সাথে সাথে বন্ধ হয় -->
+    <button onclick="document.getElementById('welcomeNoticeModal').style.display='none';" style="background: linear-gradient(45deg, #ffcc00, #ff9900); color: #000; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%;">খেলতে শুরু করুন (Touch Here)</button>
   </div>
 </div>
 
 <div class="app-container">
 
+    <!-- ওপরের ডেভেলপার ব্র্যান্ডিং বাটন -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+        <span style="font-size: 12px; color: #8b949e;">Runner Cash Pro</span>
+        <div class="dev-badge" onclick="openDevModal()">
+            👨‍💻 Developer: Sak_424
+        </div>
+    </div>
+
     <!-- লগইন স্ক্রিন -->
     <div id="loginScreen">
         <h3 class="login-title">🎮 গেমার প্রোফাইল</h3>
-        <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">টাকা উইথড্র করার জন্য আপনার সঠিক PhonePe/GPay নম্বর দিন</p>
+        <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">টাকা তোলার জন্য আপনার সঠিক PhonePe/GPay নম্বর দিন</p>
         <input type="text" id="inputPlayerName" placeholder="আপনার নাম লিখুন">
         <input type="tel" id="inputPlayerPhone" placeholder="১০ সংখ্যার মোবাইল নম্বর" maxlength="10">
         <button class="btn-withdraw" style="margin-top: 8px;" onclick="registerPlayer()">গেমে প্রবেশ করুন</button>
@@ -153,7 +168,7 @@
             </div>
         </div>
 
-        <!-- স্পিন ও এক্সট্রা কয়েন অপশন বাটন গ্রিড -->
+        <!-- স্পিন ও এক্সট্রা বাটন গ্রিড -->
         <div class="action-grid">
             <div class="btn-action-card" onclick="openSpinModal()">
                 🎡 <b>লাকি স্পিন হুইল</b>
@@ -207,6 +222,21 @@
 
 </div>
 
+<!-- ডেভেলপার পপ-আপ মডাল -->
+<div id="devModal" class="popup-modal">
+    <div class="modal-card" style="border: 2px solid #58a6ff;">
+        <div style="font-size: 45px; margin-bottom: 5px;">👨‍💻</div>
+        <h3 style="color: #58a6ff; margin-bottom: 5px;">Sak_424</h3>
+        <p style="font-size: 13px; color: #00ffcc; font-weight: bold; margin-bottom: 12px;">★ Official Game Developer ★</p>
+        <div style="background: #21262d; padding: 12px; border-radius: 10px; font-size: 12px; color: #c9d1d9; line-height: 1.6; margin-bottom: 15px; text-align: left;">
+            <p>✔ <b>অ্যাপ ক্রিয়েটর:</b> Sak_424</p>
+            <p>✔ <b>ভার্সন:</b> Pro Edition v2.0</p>
+            <p>✔ <b>পেমেন্ট সাপোর্ট:</b> ১০০% ভেরিফাইড ও জেনুইন</p>
+        </div>
+        <button class="btn-withdraw" style="background: #21262d; border: 1px solid #30363d;" onclick="closeDevModal()">বন্ধ করুন</button>
+    </div>
+</div>
+
 <!-- স্পিন হুইল মডাল -->
 <div id="spinModal" class="popup-modal">
     <div class="modal-card">
@@ -235,6 +265,10 @@
 </div>
 
 <script>
+    // ডেভেলপার পপ-আপ কন্ট্রোল
+    function openDevModal() { document.getElementById('devModal').style.display = 'flex'; }
+    function closeDevModal() { document.getElementById('devModal').style.display = 'none'; }
+
     // সাউন্ড সিস্টেম
     let audioCtx;
     function playAudio(freq, type, duration) {
@@ -257,29 +291,32 @@
     const ringJump = () => playAudio(440, 'triangle', 0.1);
     const ringDead = () => playAudio(150, 'sawtooth', 0.3);
 
-    // Adsterra ডাইরেক্ট লিঙ্ক হ্যান্ডলার
+    // Adsterra লিঙ্ক
     const ADSTERRA_LINK = "https://asiafilm.org/4/a11c63c2a20f65d08c98deeb5e703fce";
-    function openAdLink() {
-        window.open(ADSTERRA_LINK, '_blank');
-    }
+    function openAdLink() { window.open(ADSTERRA_LINK, '_blank'); }
 
-    // Firebase ইনিশিয়ালাইজেশন
-    const firebaseConfig = {
-        apiKey: "AIzaSyBL2MkFlwXu--GCyce2mer_yB7W-2XmzJ8",
-        authDomain: "running-game-15125.firebaseapp.com",
-        databaseURL: "https://running-game-15125-default-rtdb.firebaseio.com",
-        projectId: "running-game-15125",
-        storageBucket: "running-game-15125.firebasestorage.app",
-        messagingSenderId: "724369788844",
-        appId: "1:724369788844:web:4a560fdad91a6adf217409"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    // Firebase সেফ ইনিশিয়ালাইজেশন
+    let db = null;
+    try {
+        const firebaseConfig = {
+            apiKey: "AIzaSyBL2MkFlwXu--GCyce2mer_yB7W-2XmzJ8",
+            authDomain: "running-game-15125.firebaseapp.com",
+            databaseURL: "https://running-game-15125-default-rtdb.firebaseio.com",
+            projectId: "running-game-15125",
+            storageBucket: "running-game-15125.firebasestorage.app",
+            messagingSenderId: "724369788844",
+            appId: "1:724369788844:web:4a560fdad91a6adf217409"
+        };
+        if (typeof firebase !== 'undefined') {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+        }
+    } catch(err) { console.log("Firebase Init Notice:", err); }
 
     let phone = localStorage.getItem('player_phone');
     let playerName = localStorage.getItem('player_name');
-    let coins = 0;
-    let balance = 0.00;
+    let coins = Number(localStorage.getItem('saved_coins')) || 0;
+    let balance = Number(localStorage.getItem('saved_balance')) || 0.00;
     let userRef = null;
 
     function checkAuth() {
@@ -288,6 +325,7 @@
             document.getElementById('mainGameSection').style.display = 'block';
             document.getElementById('userTag').innerText = playerName;
             document.getElementById('linkedPhoneDisplay').innerText = 'মোবাইল: ' + phone;
+            updateDisplay();
             attachDBListener();
         } else {
             document.getElementById('loginScreen').style.display = 'block';
@@ -320,6 +358,7 @@
     }
 
     function attachDBListener() {
+        if (!db || !phone) return;
         userRef = db.ref('players/' + phone);
         userRef.on('value', (snap) => {
             const data = snap.val();
@@ -328,7 +367,7 @@
                 balance = Number(data.balance) || 0.00;
                 updateDisplay();
             } else {
-                userRef.set({ name: playerName, phone: phone, coins: 0, balance: 0.00 });
+                userRef.set({ name: playerName, phone: phone, coins: coins, balance: balance });
             }
         });
     }
@@ -336,9 +375,12 @@
     function updateDisplay() {
         document.getElementById('coinCount').innerText = coins;
         document.getElementById('cashBalance').innerText = '₹' + balance.toFixed(2);
+        localStorage.setItem('saved_coins', coins);
+        localStorage.setItem('saved_balance', balance);
     }
 
     function syncDB() {
+        updateDisplay();
         if (userRef) {
             userRef.update({ coins: Number(coins), balance: Number(balance) });
         }
@@ -353,89 +395,20 @@
     let coinList = [], barrierList = [], gameTicker = 0, gracePeriod = 0;
     let reviveCountInterval = null;
 
-    window.addEventListener('touchstart', (e) => {
+    function handleJump() {
         if (!isRunning) return;
         if (hero.y > 60) {
             hero.dy = hero.jumpPower;
             hero.isGrounded = false;
             ringJump();
         }
-    });
+    }
+
+    window.addEventListener('touchstart', handleJump);
+    window.addEventListener('click', handleJump);
 
     function initAndPlay() {
         document.getElementById('startOverlay').style.display = 'none';
         document.getElementById('reviveOverlay').style.display = 'none';
         hero.y = groundY - 26;
-        hero.dy = 0;
-        coinList = [];
-        barrierList = [];
-        gameTicker = 0;
-        gracePeriod = 120;
-        isRunning = true;
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
-    function gameCycle() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#21262d';
-        ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
-        ctx.fillStyle = '#30363d';
-        ctx.fillRect(0, groundY, canvas.width, 3);
-
-        if (isRunning) {
-            gameTicker++;
-            if (gracePeriod > 0) gracePeriod--;
-
-            hero.dy += hero.gravity;
-            hero.y += hero.dy;
-
-            if (hero.y >= groundY - hero.h) {
-                hero.y = groundY - hero.h;
-                hero.dy = 0;
-                hero.isGrounded = true;
-            }
-
-            if (gameTicker % 35 === 0) {
-                let randomH = groundY - 25 - Math.floor(Math.random() * 85);
-                coinList.push({ x: canvas.width, y: randomH, r: 8 });
-            }
-
-            if (gracePeriod === 0 && gameTicker % 150 === 0) {
-                let bH = 30 + Math.floor(Math.random() * 15);
-                barrierList.push({ x: canvas.width, y: groundY - bH, w: 18, h: bH });
-            }
-
-            for (let i = 0; i < coinList.length; i++) {
-                let c = coinList[i];
-                c.x -= 3.2;
-
-                ctx.fillStyle = '#ffd700';
-                ctx.beginPath();
-                ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#ffa502';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                if (hero.x < c.x + c.r && hero.x + hero.w > c.x - c.r &&
-                    hero.y < c.y + c.r && hero.y + hero.h > c.y - c.r) {
-                    ringCoin();
-                    coins += 10;
-                    updateDisplay();
-                    syncDB();
-                    coinList.splice(i, 1);
-                    i--;
-                }
-            }
-
-            for (let j = 0; j < barrierList.length; j++) {
-                let b = barrierList[j];
-                b.x -= 3.2;
-
-                ctx.fillStyle = '#ff4757';
-                ctx.fillRect(b.x, b.y, b.w, b.h);
-
-                if (hero.x + hero.w > b.x && hero.x < b.x + b.w && hero.y + hero.h > b.y) {
-                    triggerRevivePrompt();
-                }
-   
+        hero.d
