@@ -116,14 +116,13 @@
       <p style="margin: 4px 0;">💰 <b>ক্যাশ কনভার্ট:</b> প্রতি ১০০ কয়েন = ₹০.২০ টাকা।</p>
       <p style="margin: 4px 0;">📲 <b>সরাসরি পেমেন্ট:</b> মাত্র ₹২ হলেই আপনার PhonePe/GPay-তে টাকা পৌঁছে যাবে।</p>
     </div>
-    <!-- সরাসরি ইনলাইন অ্যাকশন যাতে টাচে সাথে সাথে বন্ধ হয় -->
-    <button onclick="document.getElementById('welcomeNoticeModal').style.display='none';" style="background: linear-gradient(45deg, #ffcc00, #ff9900); color: #000; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%;">খেলতে শুরু করুন (Touch Here)</button>
+    <button type="button" onclick="document.getElementById('welcomeNoticeModal').style.display='none';" style="background: linear-gradient(45deg, #ffcc00, #ff9900); color: #000; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%;">খেলতে শুরু করুন</button>
   </div>
 </div>
 
 <div class="app-container">
 
-    <!-- ওপরের ডেভেলপার ব্র্যান্ডিং বাটন -->
+    <!-- ওপরে ডেভেলপার ব্যাজ -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
         <span style="font-size: 12px; color: #8b949e;">Runner Cash Pro</span>
         <div class="dev-badge" onclick="openDevModal()">
@@ -137,7 +136,7 @@
         <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">টাকা তোলার জন্য আপনার সঠিক PhonePe/GPay নম্বর দিন</p>
         <input type="text" id="inputPlayerName" placeholder="আপনার নাম লিখুন">
         <input type="tel" id="inputPlayerPhone" placeholder="১০ সংখ্যার মোবাইল নম্বর" maxlength="10">
-        <button class="btn-withdraw" style="margin-top: 8px;" onclick="registerPlayer()">গেমে প্রবেশ করুন</button>
+        <button type="button" class="btn-withdraw" style="margin-top: 8px;" onclick="registerPlayer()">গেমে প্রবেশ করুন</button>
     </div>
 
     <!-- মূল গেম সেকশন -->
@@ -185,7 +184,7 @@
             <canvas id="gameCanvas" width="360" height="260"></canvas>
             
             <div id="startOverlay" class="overlay-screen">
-                <button class="btn-play" onclick="initAndPlay()">▶ গেম স্টার্ট</button>
+                <button type="button" class="btn-play" onclick="initAndPlay()">▶ গেম স্টার্ট</button>
                 <p style="font-size: 12px; color: #8b949e; margin-top: 10px;">স্ক্রিনের যেকোনো জায়গায় ট্যাপ করে লাফান</p>
             </div>
 
@@ -193,8 +192,8 @@
             <div id="reviveOverlay" class="overlay-screen" style="display: none;">
                 <h3 style="color: #ff7b72; margin-bottom: 5px;">খেলা শেষ!</h3>
                 <p style="font-size: 13px; color: #8b949e; margin-bottom: 15px;">স্কোর বাঁচিয়ে আবার খেলতে চান?</p>
-                <button class="btn-play" style="background: #1f6feb; font-size: 15px; padding: 10px 22px;" onclick="claimRevive()">📺 অ্যাড দেখে প্রাণ বাঁচান (<span id="reviveTimer">5</span>s)</button>
-                <button onclick="skipRevive()" style="background: transparent; border: none; color: #8b949e; margin-top: 10px; font-size: 12px; cursor: pointer;">না, নতুন করে শুরু করুন</button>
+                <button type="button" class="btn-play" style="background: #1f6feb; font-size: 15px; padding: 10px 22px;" onclick="claimRevive()">📺 অ্যাড দেখে প্রাণ বাঁচান (<span id="reviveTimer">5</span>s)</button>
+                <button type="button" onclick="skipRevive()" style="background: transparent; border: none; color: #8b949e; margin-top: 10px; font-size: 12px; cursor: pointer;">না, নতুন করে শুরু করুন</button>
             </div>
         </div>
 
@@ -204,7 +203,7 @@
         </div>
 
         <!-- কয়েন কনভার্ট বাটন -->
-        <button id="adBtn" class="ad-button" onclick="convertCoinsToCash()">
+        <button id="adBtn" type="button" class="ad-button" onclick="convertCoinsToCash()">
             🪙 ১০০ কয়েন ভাঙিয়ে নিন (+ ₹০.২০ টাকা)
         </button>
 
@@ -215,7 +214,7 @@
                 <span id="linkedPhoneDisplay" style="font-size: 11px; color: #58a6ff;"></span>
             </div>
             <input type="number" id="cashInput" placeholder="টাকার পরিমাণ (কমপক্ষে ₹২.০০)">
-            <button class="btn-withdraw" onclick="submitCashOut()">উইথড্র রিকোয়েস্ট পাঠান</button>
+            <button type="button" class="btn-withdraw" onclick="submitCashOut()">উইথড্র রিকোয়েস্ট পাঠান</button>
         </div>
 
     </div>
@@ -233,7 +232,7 @@
             <p>✔ <b>ভার্সন:</b> Pro Edition v2.0</p>
             <p>✔ <b>পেমেন্ট সাপোর্ট:</b> ১০০% ভেরিফাইড ও জেনুইন</p>
         </div>
-        <button class="btn-withdraw" style="background: #21262d; border: 1px solid #30363d;" onclick="closeDevModal()">বন্ধ করুন</button>
+        <button type="button" class="btn-withdraw" style="background: #21262d; border: 1px solid #30363d;" onclick="closeDevModal()">বন্ধ করুন</button>
     </div>
 </div>
 
@@ -243,8 +242,8 @@
         <h3 style="color: #00ffcc;">🎡 লাকি স্পিন হুইল</h3>
         <p style="font-size: 12px; color: #8b949e;">চাকা ঘুরিয়ে জিতে নিন ২০০ পর্যন্ত কয়েন!</p>
         <canvas id="wheelCanvas" width="220" height="220"></canvas>
-        <button id="spinBtn" class="btn-withdraw" style="background: linear-gradient(135deg, #00ffcc, #0969da); color: #000; font-weight: bold;" onclick="startSpin()">চাকা ঘোরান</button>
-        <button onclick="closeSpinModal()" style="background: transparent; border: none; color: #8b949e; margin-top: 12px; font-size: 12px; cursor: pointer;">বন্ধ করুন</button>
+        <button id="spinBtn" type="button" class="btn-withdraw" style="background: linear-gradient(135deg, #00ffcc, #0969da); color: #000; font-weight: bold;" onclick="startSpin()">চাকা ঘোরান</button>
+        <button type="button" onclick="closeSpinModal()" style="background: transparent; border: none; color: #8b949e; margin-top: 12px; font-size: 12px; cursor: pointer;">বন্ধ করুন</button>
     </div>
 </div>
 
@@ -258,18 +257,16 @@
             <h2 id="dailyRewardText" style="color: #ffcc00; margin: 5px 0;">+৫০ কয়েন</h2>
             <p style="font-size: 11px; color: #8b949e;">আজকের ফ্রি রিওয়ার্ড প্রস্তুত!</p>
         </div>
-        <button class="btn-withdraw" style="margin-bottom: 8px;" onclick="claimDailyReward(1)">সরাসরি সংগ্রহ করুন</button>
-        <button class="btn-withdraw" style="background: linear-gradient(135deg, #f39c12, #e67e22);" onclick="claimDailyReward(2)">📺 অ্যাড দেখে ডাবল (২X) নিন</button>
-        <button onclick="closeDailyModal()" style="background: transparent; border: none; color: #8b949e; margin-top: 10px; font-size: 12px; cursor: pointer;">বন্ধ করুন</button>
+        <button type="button" class="btn-withdraw" style="margin-bottom: 8px;" onclick="claimDailyReward(1)">সরাসরি সংগ্রহ করুন</button>
+        <button type="button" class="btn-withdraw" style="background: linear-gradient(135deg, #f39c12, #e67e22);" onclick="claimDailyReward(2)">📺 অ্যাড দেখে ডাবল (২X) নিন</button>
+        <button type="button" onclick="closeDailyModal()" style="background: transparent; border: none; color: #8b949e; margin-top: 10px; font-size: 12px; cursor: pointer;">বন্ধ করুন</button>
     </div>
 </div>
 
 <script>
-    // ডেভেলপার পপ-আপ কন্ট্রোল
     function openDevModal() { document.getElementById('devModal').style.display = 'flex'; }
     function closeDevModal() { document.getElementById('devModal').style.display = 'none'; }
 
-    // সাউন্ড সিস্টেম
     let audioCtx;
     function playAudio(freq, type, duration) {
         try {
@@ -291,11 +288,9 @@
     const ringJump = () => playAudio(440, 'triangle', 0.1);
     const ringDead = () => playAudio(150, 'sawtooth', 0.3);
 
-    // Adsterra লিঙ্ক
     const ADSTERRA_LINK = "https://asiafilm.org/4/a11c63c2a20f65d08c98deeb5e703fce";
     function openAdLink() { window.open(ADSTERRA_LINK, '_blank'); }
 
-    // Firebase সেফ ইনিশিয়ালাইজেশন
     let db = null;
     try {
         const firebaseConfig = {
@@ -311,7 +306,7 @@
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
         }
-    } catch(err) { console.log("Firebase Init Notice:", err); }
+    } catch(err) { console.log(err); }
 
     let phone = localStorage.getItem('player_phone');
     let playerName = localStorage.getItem('player_name');
@@ -319,13 +314,18 @@
     let balance = Number(localStorage.getItem('saved_balance')) || 0.00;
     let userRef = null;
 
+    // সরাসরি ও দ্রুত স্ক্রিন স্যুইচ
+    function showGameUI() {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainGameSection').style.display = 'block';
+        document.getElementById('userTag').innerText = playerName;
+        document.getElementById('linkedPhoneDisplay').innerText = 'মোবাইল: ' + phone;
+        updateDisplay();
+    }
+
     function checkAuth() {
         if (phone && playerName) {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainGameSection').style.display = 'block';
-            document.getElementById('userTag').innerText = playerName;
-            document.getElementById('linkedPhoneDisplay').innerText = 'মোবাইল: ' + phone;
-            updateDisplay();
+            showGameUI();
             attachDBListener();
         } else {
             document.getElementById('loginScreen').style.display = 'block';
@@ -344,7 +344,10 @@
         playerName = nameInput;
         localStorage.setItem('player_phone', phone);
         localStorage.setItem('player_name', playerName);
-        checkAuth();
+        
+        // অবিলম্বে গেমের ইন্টারফেস দেখাবে
+        showGameUI();
+        attachDBListener();
     }
 
     function logoutPlayer() {
@@ -359,17 +362,19 @@
 
     function attachDBListener() {
         if (!db || !phone) return;
-        userRef = db.ref('players/' + phone);
-        userRef.on('value', (snap) => {
-            const data = snap.val();
-            if (data) {
-                coins = Number(data.coins) || 0;
-                balance = Number(data.balance) || 0.00;
-                updateDisplay();
-            } else {
-                userRef.set({ name: playerName, phone: phone, coins: coins, balance: balance });
-            }
-        });
+        try {
+            userRef = db.ref('players/' + phone);
+            userRef.on('value', (snap) => {
+                const data = snap.val();
+                if (data) {
+                    coins = Number(data.coins) || coins;
+                    balance = Number(data.balance) || balance;
+                    updateDisplay();
+                } else {
+                    userRef.set({ name: playerName, phone: phone, coins: coins, balance: balance });
+                }
+            });
+        } catch(e) {}
     }
 
     function updateDisplay() {
@@ -382,11 +387,11 @@
     function syncDB() {
         updateDisplay();
         if (userRef) {
-            userRef.update({ coins: Number(coins), balance: Number(balance) });
+            try { userRef.update({ coins: Number(coins), balance: Number(balance) }); } catch(e) {}
         }
     }
 
-    // গেমপ্লে ক্যানভাস লজিক
+    // গেমপ্লে লজিক
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     let isRunning = false;
@@ -395,7 +400,7 @@
     let coinList = [], barrierList = [], gameTicker = 0, gracePeriod = 0;
     let reviveCountInterval = null;
 
-    function handleJump() {
+    function handleJump(e) {
         if (!isRunning) return;
         if (hero.y > 60) {
             hero.dy = hero.jumpPower;
@@ -404,11 +409,7 @@
         }
     }
 
-    window.addEventListener('touchstart', handleJump);
-    window.addEventListener('click', handleJump);
+    canvas.addEventListener('touchstart', handleJump);
+    canvas.addEventListener('click', handleJump);
 
-    function initAndPlay() {
-        document.getElementById('startOverlay').style.display = 'none';
-        document.getElementById('reviveOverlay').style.display = 'none';
-        hero.y = groundY - 26;
-        hero.d
+   
