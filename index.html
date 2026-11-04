@@ -2,23 +2,51 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Runner Cash Pro - By Sak_424</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; touch-action: manipulation; }
         body { background: #0b0e14; color: #f0f6fc; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 30px; }
-        .app-container { width: 100%; max-width: 420px; padding: 12px; }
+        .app-container { width: 100%; max-width: 420px; padding: 12px; position: relative; }
+
+        /* বাটন ও টাচ ফিক্স */
+        button, input, .btn-action-card, .dev-badge {
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            pointer-events: auto !important;
+        }
+
+        /* ডেভেলপার ব্যাজ */
+        .dev-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(88, 166, 255, 0.15); border: 1px solid #58a6ff;
+            color: #58a6ff; font-size: 12px; padding: 6px 14px; border-radius: 20px;
+            font-weight: bold; margin-bottom: 10px;
+        }
 
         /* লগইন স্ক্রিন */
         #loginScreen {
             background: #151b23; border: 1px solid #30363d;
-            border-radius: 12px; padding: 25px 18px; margin-top: 30px;
+            border-radius: 14px; padding: 25px 18px; margin-top: 25px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.6); text-align: center;
         }
-        .login-title { font-size: 20px; color: #58a6ff; margin-bottom: 5px; }
+        .login-title { font-size: 20px; color: #58a6ff; margin-bottom: 6px; }
+
+        input {
+            width: 100%; padding: 13px; margin: 8px 0; border-radius: 8px;
+            border: 1px solid #30363d; background: #0b0e14; color: #fff; outline: none;
+            font-size: 15px; -webkit-user-select: text; user-select: text;
+        }
+        input:focus { border-color: #58a6ff; }
+
+        .btn-withdraw {
+            background: #238636; color: #fff; border: none; padding: 13px;
+            font-weight: bold; border-radius: 8px; width: 100%; font-size: 15px;
+        }
+        .btn-withdraw:active { opacity: 0.85; transform: scale(0.99); }
 
         /* ড্যাশবোর্ড */
         .dashboard {
@@ -32,21 +60,14 @@
         .stat-item strong { font-size: 15px; color: #58a6ff; }
         .cash-color { color: #3fb950 !important; }
 
-        /* ডেভেলপার ব্যাজ */
-        .dev-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(88, 166, 255, 0.12); border: 1px solid #58a6ff;
-            color: #58a6ff; font-size: 12px; padding: 5px 12px; border-radius: 20px;
-            cursor: pointer; font-weight: bold; margin-bottom: 10px;
-        }
-
-        /* বাটন গ্রিড */
+        /* অ্যাকশন গ্রিড */
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
         .btn-action-card {
             background: #1c2128; border: 1px solid #30363d; border-radius: 10px;
-            padding: 10px; text-align: center; color: #fff; cursor: pointer;
+            padding: 10px; text-align: center; color: #fff;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
+        .btn-action-card:active { transform: scale(0.98); }
         .btn-action-card span { display: block; font-size: 11px; color: #8b949e; margin-top: 2px; }
 
         /* ক্যানভাস এরিয়া */
@@ -66,50 +87,52 @@
             background: linear-gradient(135deg, #238636, #2ea043);
             color: #fff; border: none; padding: 14px 36px; font-size: 18px;
             font-weight: bold; border-radius: 30px; box-shadow: 0 0 20px rgba(46,160,67,0.6);
-            cursor: pointer;
         }
 
-        /* কন্ট্রোল বাটন ও ইনপুট */
         .ad-button {
             background: linear-gradient(135deg, #1f6feb, #0969da);
             color: #fff; border: none; padding: 12px; font-size: 14px;
             font-weight: bold; border-radius: 8px; width: 100%; margin: 10px 0;
-            box-shadow: 0 4px 12px rgba(31,111,235,0.3); cursor: pointer;
+            box-shadow: 0 4px 12px rgba(31,111,235,0.3);
         }
-        .ad-button:disabled { background: #30363d; color: #8b949e; cursor: not-allowed; }
         
         .withdraw-box {
             background: #151b23; border: 1px solid #30363d;
             border-radius: 12px; padding: 14px; margin-top: 5px;
         }
-        input {
-            width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px;
-            border: 1px solid #30363d; background: #0b0e14; color: #fff; outline: none;
-            font-size: 14px;
-        }
-        .btn-withdraw {
-            background: #238636; color: #fff; border: none; padding: 12px;
-            font-weight: bold; border-radius: 8px; width: 100%; cursor: pointer;
-        }
-        .btn-switch { background: transparent; border: 1px solid #30363d; color: #8b949e; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+        .btn-switch { background: transparent; border: 1px solid #30363d; color: #8b949e; padding: 4px 8px; border-radius: 6px; font-size: 11px; }
 
         /* পপ-আপ মডাল */
         .popup-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; padding: 20px;
+            background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; padding: 20px;
         }
         .modal-card {
             background: #161b22; border: 1px solid #30363d; border-radius: 16px;
-            max-width: 360px; width: 100%; padding: 20px; text-align: center;
+            max-width: 360px; width: 100%; padding: 22px; text-align: center;
         }
         #wheelCanvas { width: 220px; height: 220px; margin: 15px auto; display: block; border-radius: 50%; }
     </style>
 </head>
 <body>
 
+<!-- গেম শুরুর ওয়েলকাম নোটিশ (আপনার পছন্দের সোনালী ডিজাইন) -->
+<div id="welcomeNoticeModal" class="popup-modal" style="display: flex;">
+  <div class="modal-card" style="border: 2px solid #ffcc00; box-shadow: 0 0 25px rgba(255, 204, 0, 0.3);">
+    <h2 style="color: #ffcc00; margin-top: 0; font-size: 20px;">🎮 খেলুন ও আসল টাকা জিতুন!</h2>
+    <div style="text-align: left; font-size: 13px; line-height: 1.6; color: #e0e0e0; margin: 15px 0; background: #21262d; padding: 12px; border-radius: 10px;">
+      <p style="margin: 5px 0;">🪙 <b>কয়েন সংগ্রহ:</b> গেম খেলে ও চাকা ঘুরিয়ে কয়েন বাড়ান।</p>
+      <p style="margin: 5px 0;">💰 <b>ক্যাশ কনভার্ট:</b> প্রতি ১০০ কয়েন = ₹০.২০ টাকা।</p>
+      <p style="margin: 5px 0;">📲 <b>সরাসরি পেমেন্ট:</b> মাত্র ₹২ হলেই আপনার PhonePe/GPay-তে টাকা পৌঁছে যাবে।</p>
+    </div>
+    <!-- বোতামে চাপ দিলে সাথে সাথে এটি সম্পূর্ণ ভ্যানিশ হয়ে যাবে -->
+    <button type="button" id="btnStartWelcome" style="background: linear-gradient(45deg, #ffcc00, #ff9900); color: #000; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 25px; width: 100%;">খেলতে শুরু করুন</button>
+  </div>
+</div>
+
 <div class="app-container">
 
-    <!-- ওপরের ডেভেলপার ব্যাজ -->
+    <!-- ওপরে ডেভেলপার ব্র্যান্ডিং ব্যাজ -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
         <span style="font-size: 12px; color: #8b949e;">Runner Cash Pro</span>
         <div class="dev-badge" onclick="openDevModal()">
@@ -117,13 +140,13 @@
         </div>
     </div>
 
-    <!-- লগইন স্ক্রিন (সরাসরি দেখা যাবে) -->
+    <!-- লগইন স্ক্রিন -->
     <div id="loginScreen">
         <h3 class="login-title">🎮 গেমার প্রোফাইল</h3>
-        <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">টাকা উইথড্র করার জন্য আপনার সঠিক PhonePe/GPay নম্বর দিন</p>
+        <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">টাকা তোলার জন্য আপনার সঠিক PhonePe/GPay নম্বর দিন</p>
         <input type="text" id="inputPlayerName" placeholder="আপনার নাম লিখুন">
         <input type="tel" id="inputPlayerPhone" placeholder="১০ সংখ্যার মোবাইল নম্বর" maxlength="10">
-        <button type="button" class="btn-withdraw" style="margin-top: 8px;" onclick="registerPlayer()">গেমে প্রবেশ করুন</button>
+        <button type="button" id="btnEnterGame" class="btn-withdraw" style="margin-top: 10px;">গেমে প্রবেশ করুন</button>
     </div>
 
     <!-- মূল গেম সেকশন -->
@@ -150,11 +173,11 @@
                 <strong id="cashBalance" class="cash-color">₹0.00</strong>
             </div>
             <div>
-                <button class="btn-switch" onclick="logoutPlayer()">লগআউট</button>
+                <button type="button" class="btn-switch" onclick="logoutPlayer()">লগআউট</button>
             </div>
         </div>
 
-        <!-- স্পিন ও ডেইলি বাটন -->
+        <!-- স্পিন ও দৈনিক বাটন -->
         <div class="action-grid">
             <div class="btn-action-card" onclick="openSpinModal()">
                 🎡 <b>লাকি স্পিন হুইল</b>
@@ -175,16 +198,16 @@
                 <p style="font-size: 12px; color: #8b949e; margin-top: 10px;">ক্যানভাসে ট্যাপ করে লাফান</p>
             </div>
 
-            <!-- গেম ওভার রিভাইভ মডাল -->
+            <!-- রিভাইভ মডাল -->
             <div id="reviveOverlay" class="overlay-screen" style="display: none;">
                 <h3 style="color: #ff7b72; margin-bottom: 5px;">খেলা শেষ!</h3>
                 <p style="font-size: 13px; color: #8b949e; margin-bottom: 15px;">স্কোর বাঁচিয়ে আবার খেলতে চান?</p>
                 <button type="button" class="btn-play" style="background: #1f6feb; font-size: 15px; padding: 10px 22px;" onclick="claimRevive()">📺 অ্যাড দেখে প্রাণ বাঁচান (<span id="reviveTimer">5</span>s)</button>
-                <button type="button" onclick="skipRevive()" style="background: transparent; border: none; color: #8b949e; margin-top: 10px; font-size: 12px; cursor: pointer;">না, নতুন করে শুরু করুন</button>
+                <button type="button" onclick="skipRevive()" style="background: transparent; border: none; color: #8b949e; margin-top: 10px; font-size: 12px;">না, নতুন করে শুরু করুন</button>
             </div>
         </div>
 
-        <!-- ইনস্ট্যান্ট অ্যাড ওয়াচ বাটন -->
+        <!-- ইনস্ট্যান্ট ভিডিও অ্যাড ওয়াচ বাটন -->
         <div onclick="watchAdForCoins()" style="background: rgba(88, 166, 255, 0.1); border: 1px dashed #58a6ff; border-radius: 8px; padding: 8px; margin-top: 10px; text-align: center; font-size: 12px; color: #58a6ff; cursor: pointer;">
             🎬 <b>ভিডিও দেখুন:</b> একটি ছোট অ্যাড দেখুন এবং সরাসরি <b>+৩০ কয়েন</b> পান!
         </div>
@@ -230,7 +253,7 @@
         <p style="font-size: 12px; color: #8b949e;">চাকা ঘুরিয়ে জিতে নিন ২০০ পর্যন্ত কয়েন!</p>
         <canvas id="wheelCanvas" width="220" height="220"></canvas>
         <button id="spinBtn" type="button" class="btn-withdraw" style="background: linear-gradient(135deg, #00ffcc, #0969da); color: #000; font-weight: bold;" onclick="startSpin()">চাকা ঘোরান</button>
-        <button type="button" onclick="closeSpinModal()" style="background: transparent; border: none; color: #8b949e; margin-top: 12px; font-size: 12px; cursor: pointer;">বন্ধ করুন</button>
+        <button type="button" onclick="closeSpinModal()" style="background: transparent; border: none; color: #8b949e; margin-top: 12px; font-size: 12px;">বন্ধ করুন</button>
     </div>
 </div>
 
@@ -241,16 +264,27 @@
         <p style="font-size: 12px; color: #8b949e; margin-bottom: 15px;">প্রতিদিন গেম খুলে ফ্রি কয়েন সংগ্রহ করুন</p>
         <div style="background: #21262d; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
             <span style="font-size: 35px;">🪙</span>
-            <h2 style="color: #ffcc00; margin: 5px 0;">+৫০ কয়েন</h2>
+            <h2 id="dailyRewardText" style="color: #ffcc00; margin: 5px 0;">+৫০ কয়েন</h2>
             <p style="font-size: 11px; color: #8b949e;">আজকের ফ্রি রিওয়ার্ড প্রস্তুত!</p>
         </div>
         <button type="button" class="btn-withdraw" style="margin-bottom: 8px;" onclick="claimDailyReward(1)">সরাসরি সংগ্রহ করুন</button>
         <button type="button" class="btn-withdraw" style="background: linear-gradient(135deg, #f39c12, #e67e22);" onclick="claimDailyReward(2)">📺 অ্যাড দেখে ডাবল (২X) নিন</button>
-        <button type="button" onclick="closeDailyModal()" style="background: transparent; border: none; color: #8b949e; margin-top: 10px; font-size: 12px; cursor: pointer;">বন্ধ করুন</button>
+        <button type="button" onclick="closeDailyModal()" style="background: transparent; border: none; color: #8b949e; margin-top: 10px; font-size: 12px;">বন্ধ করুন</button>
     </div>
 </div>
 
 <script>
+    // ওয়েলকাম নোটিশ ক্লোজ হ্যান্ডলার (টাচ সাথে সাথে কাজ করবে)
+    const welcomeBtn = document.getElementById('btnStartWelcome');
+    function dismissWelcome() {
+        const modal = document.getElementById('welcomeNoticeModal');
+        if (modal) modal.remove(); // স্ক্রিন থেকে লেয়ার পুরোপুরি ডিলেট
+    }
+    if (welcomeBtn) {
+        welcomeBtn.addEventListener('click', dismissWelcome);
+        welcomeBtn.addEventListener('touchend', dismissWelcome);
+    }
+
     function openDevModal() { document.getElementById('devModal').style.display = 'flex'; }
     function closeDevModal() { document.getElementById('devModal').style.display = 'none'; }
 
@@ -278,6 +312,7 @@
     const ADSTERRA_LINK = "https://asiafilm.org/4/a11c63c2a20f65d08c98deeb5e703fce";
     function openAdLink() { window.open(ADSTERRA_LINK, '_blank'); }
 
+    // Firebase সেফ লোডার
     let db = null;
     try {
         const firebaseConfig = {
@@ -290,22 +325,30 @@
             appId: "1:724369788844:web:4a560fdad91a6adf217409"
         };
         if (typeof firebase !== 'undefined') {
-            firebase.initializeApp(firebaseConfig);
+            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
             db = firebase.database();
         }
     } catch(err) {}
 
-    let phone = localStorage.getItem('player_phone');
-    let playerName = localStorage.getItem('player_name');
-    let coins = Number(localStorage.getItem('saved_coins')) || 0;
-    let balance = Number(localStorage.getItem('saved_balance')) || 0.00;
+    // নিরাপদ স্টোরেজ রিডার
+    function getStored(key) {
+        try { return localStorage.getItem(key); } catch(e) { return null; }
+    }
+    function setStored(key, val) {
+        try { localStorage.setItem(key, val); } catch(e) {}
+    }
+
+    let phone = getStored('player_phone');
+    let playerName = getStored('player_name');
+    let coins = Number(getStored('saved_coins')) || 0;
+    let balance = Number(getStored('saved_balance')) || 0.00;
     let userRef = null;
 
     function showGameUI() {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('mainGameSection').style.display = 'block';
-        document.getElementById('userTag').innerText = playerName;
-        document.getElementById('linkedPhoneDisplay').innerText = 'মোবাইল: ' + phone;
+        document.getElementById('userTag').innerText = playerName || 'খেলোয়াড়';
+        document.getElementById('linkedPhoneDisplay').innerText = 'মোবাইল: ' + (phone || '');
         updateDisplay();
     }
 
@@ -319,28 +362,45 @@
         }
     }
 
-    function registerPlayer() {
-        let nameInput = document.getElementById('inputPlayerName').value.trim();
-        let phoneInput = document.getElementById('inputPlayerPhone').value.trim();
-        
-        if (!nameInput || phoneInput.length < 10) {
-            alert('দয়া করে আপনার নাম এবং সঠিক ১০ সংখ্যার মোবাইল নম্বর দিন!');
+    // গেমে প্রবেশ নিশ্চিত করার ফাংশন
+    function handleLoginAction() {
+        let nameEl = document.getElementById('inputPlayerName');
+        let phoneEl = document.getElementById('inputPlayerPhone');
+        let nameInput = nameEl ? nameEl.value.trim() : '';
+        let phoneInput = phoneEl ? phoneEl.value.trim() : '';
+
+        if (!nameInput) {
+            alert('দয়া করে আপনার নাম লিখুন!');
+            return;
+        }
+        if (phoneInput.length < 10) {
+            alert('দয়া করে সঠিক ১০ সংখ্যার মোবাইল নম্বর দিন!');
             return;
         }
 
         phone = phoneInput;
         playerName = nameInput;
-        localStorage.setItem('player_phone', phone);
-        localStorage.setItem('player_name', playerName);
-        
+        setStored('player_phone', phone);
+        setStored('player_name', playerName);
+
+        // অবিলম্বে গেম স্ক্রিনে নিয়ে যাওয়া
         showGameUI();
         attachDBListener();
     }
 
+    // বোতামের সরাসরি লিসেনার
+    const enterBtn = document.getElementById('btnEnterGame');
+    if (enterBtn) {
+        enterBtn.addEventListener('click', handleLoginAction);
+        enterBtn.addEventListener('touchend', handleLoginAction);
+    }
+
     function logoutPlayer() {
         if (confirm('আপনি কি অন্য মোবাইল নম্বর দিয়ে খেলতে চান?')) {
-            localStorage.removeItem('player_phone');
-            localStorage.removeItem('player_name');
+            try {
+                localStorage.removeItem('player_phone');
+                localStorage.removeItem('player_name');
+            } catch(e) {}
             phone = null;
             playerName = null;
             checkAuth();
@@ -358,83 +418,4 @@
                     balance = Number(data.balance) || balance;
                     updateDisplay();
                 } else {
-                    userRef.set({ name: playerName, phone: phone, coins: coins, balance: balance });
-                }
-            });
-        } catch(e) {}
-    }
-
-    function updateDisplay() {
-        document.getElementById('coinCount').innerText = coins;
-        document.getElementById('cashBalance').innerText = '₹' + balance.toFixed(2);
-        localStorage.setItem('saved_coins', coins);
-        localStorage.setItem('saved_balance', balance);
-    }
-
-    function syncDB() {
-        updateDisplay();
-        if (userRef) {
-            try { userRef.update({ coins: Number(coins), balance: Number(balance) }); } catch(e) {}
-        }
-    }
-
-    // গেম ক্যানভাস লজিক
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    let isRunning = false;
-    let groundY = 220;
-    let hero = { x: 40, y: groundY - 26, w: 24, h: 26, dy: 0, gravity: 0.55, jumpPower: -9.5, isGrounded: true };
-    let coinList = [], barrierList = [], gameTicker = 0, gracePeriod = 0;
-    let reviveCountInterval = null;
-
-    function handleJump() {
-        if (!isRunning) return;
-        if (hero.y > 60) {
-            hero.dy = hero.jumpPower;
-            hero.isGrounded = false;
-            ringJump();
-        }
-    }
-
-    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleJump(); });
-    canvas.addEventListener('click', handleJump);
-
-    function initAndPlay() {
-        document.getElementById('startOverlay').style.display = 'none';
-        document.getElementById('reviveOverlay').style.display = 'none';
-        hero.y = groundY - 26;
-        hero.dy = 0;
-        coinList = [];
-        barrierList = [];
-        gameTicker = 0;
-        gracePeriod = 120;
-        isRunning = true;
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
-    function gameCycle() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#21262d';
-        ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
-        ctx.fillStyle = '#30363d';
-        ctx.fillRect(0, groundY, canvas.width, 3);
-
-        if (isRunning) {
-            gameTicker++;
-            if (gracePeriod > 0) gracePeriod--;
-
-            hero.dy += hero.gravity;
-            hero.y += hero.dy;
-
-            if (hero.y >= groundY - hero.h) {
-                hero.y = groundY - hero.h;
-                hero.dy = 0;
-                hero.isGrounded = true;
-            }
-
-            if (gameTicker % 35 === 0) {
-                let randomH = groundY - 25 - Math.floor(Math.random() * 85);
-                coinList.push({ x: canvas.width, y: randomH, r: 8 });
-            }
-
-     
+    
